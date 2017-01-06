@@ -1,0 +1,11 @@
+{
+  "autoload": {
+    "psr-4": {"MemMemov": "src/"}
+  },
+  "require": {
+    "php": "^7.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.3.*"
+  }
+}
