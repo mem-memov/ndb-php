@@ -1,4 +1,14 @@
 {
+  "name": "mem-memov/ndb-php",
+  "description": "Client for NDB database",
+  "type": "library",
+  "license": "Apache License 2.0",
+  "authors": [
+    {
+      "name": "Alexander Novikov",
+      "email": "mem-memov@yandex.ru"
+    }
+  ],
   "autoload": {
     "psr-4": {"MemMemov\\": "src/"}
   },

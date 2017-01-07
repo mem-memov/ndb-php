@@ -20,5 +20,4 @@ interface Ndb
 
     public function outsiders(int $id, array $ids): array;
 
-
 }
