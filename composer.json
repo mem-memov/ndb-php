@@ -1,6 +1,6 @@
 {
   "autoload": {
-    "psr-4": {"MemMemov": "src/"}
+    "psr-4": {"MemMemov\\": "src/"}
   },
   "require": {
     "php": "^7.1"
