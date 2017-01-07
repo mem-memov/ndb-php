@@ -2,23 +2,35 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$client = new MemMemov\Ndb\Client('127.0.0.1', '43152');
 
-$length = 5;
-$nodes = [];
+$socket = new MemMemov\Ndb\Socket('127.0.0.1', '43152');
+$client = new MemMemov\Ndb\Client($socket);
+
+$length = 3;
+$ids = [];
 for ($i = 0; $i < $length; $i++) {
     $id = $client->create();
-    $nodes = [$id=>[]];
+    $ids[] = $id;
 }
 
-for ($i = 0; $i < $length; $i++) {
-    for ($j = 0; $j < $length; $j++) {
-        $client->connect($ids[$i], $ids[$j]);
+foreach ($ids as $id_1) {
+    foreach ($ids as $id_2) {
+        if ($id_1 !== $id_2) {
+            $client->connect($id_1, $id_2);
+            $client->connect($id_2, $id_1);
+        }
     }
 }
 
-foreach ($nodes as $id => $data) {
-    $nodes[$id]['read'] = $client->read($id);
-}
+$intersect = $client->intersect([$ids[0], $ids[2]]);
+$union = $client->union([$ids[0], $ids[2]]);
+$difference = $client->difference([$ids[0], $ids[2]]);
 
-print_r($nodes);
+print_r("create");
+print_r($ids);
+print_r("intersect");
+print_r($intersect);
+print_r("union");
+print_r($union);
+print_r("difference");
+print_r($difference);

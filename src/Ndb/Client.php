@@ -4,18 +4,18 @@ namespace MemMemov\Ndb;
 
 class Client
 {
-    private $connection;
+    private $socket;
 
-    public function __construct(string $server, string $port)
+    public function __construct(socket $socket)
     {
-        $this->connection = new Connection($server, $port);
+        $this->socket = $socket;
     }
 
     public function create(): int
     {
         $request = 'create';
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
 
         return intval($response);
     }
@@ -23,8 +23,8 @@ class Client
     public function read(int $id): array
     {
         $request = 'read' . ' ' . $id;
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
 
         return $ids;
@@ -33,15 +33,15 @@ class Client
     public function connect(int $fromId, int $toId): void
     {
         $request = 'connect' . ' ' . $fromId . ' ' . $toId;
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
     }
 
     public function intersect(array $ids): array
     {
         $request = 'intersect' . ' ' . implode(' ', $ids);
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
 
         return $ids;
@@ -50,8 +50,8 @@ class Client
     public function union(array $ids): array
     {
         $request = 'union' . ' ' . implode(' ', $ids);
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
 
         return $ids;
@@ -60,8 +60,8 @@ class Client
     public function difference(array $ids): array
     {
         $request = 'difference' . ' ' . implode(' ', $ids);
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
 
         return $ids;
@@ -70,8 +70,8 @@ class Client
     public function insides(int $id, array $ids): array
     {
         $request = 'insides' . ' ' . $id . ' ' . implode(' ', $ids);
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
 
         return $ids;
@@ -80,10 +80,16 @@ class Client
     public function outsides(int $id, array $ids): array
     {
         $request = 'outsides' . ' ' . $id . ' ' . implode(' ', $ids);
-        $this->connection->send($request);
-        $response = $this->connection->receive();
+        $this->socket->send($request);
+        $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
 
         return $ids;
+    }
+
+    public function close(): void
+    {
+        $request = 'exit';
+        $this->socket->send($request);
     }
 }
