@@ -2,11 +2,11 @@
 
 namespace MemMemov\Ndb;
 
-class Client
+class Client implements Ndb
 {
     private $socket;
 
-    public function __construct(socket $socket)
+    public function __construct(Socket $socket)
     {
         $this->socket = $socket;
     }
@@ -67,9 +67,9 @@ class Client
         return $ids;
     }
 
-    public function insides(int $id, array $ids): array
+    public function insiders(int $id, array $ids): array
     {
-        $request = 'insides' . ' ' . $id . ' ' . implode(' ', $ids);
+        $request = 'insiders' . ' ' . $id . ' ' . implode(' ', $ids);
         $this->socket->send($request);
         $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
@@ -77,19 +77,13 @@ class Client
         return $ids;
     }
 
-    public function outsides(int $id, array $ids): array
+    public function outsiders(int $id, array $ids): array
     {
-        $request = 'outsides' . ' ' . $id . ' ' . implode(' ', $ids);
+        $request = 'outsiders' . ' ' . $id . ' ' . implode(' ', $ids);
         $this->socket->send($request);
         $response = $this->socket->receive();
         $ids = array_map('intval', explode(' ', $response));
 
         return $ids;
-    }
-
-    public function close(): void
-    {
-        $request = 'exit';
-        $this->socket->send($request);
     }
 }

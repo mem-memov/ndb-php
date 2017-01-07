@@ -2,8 +2,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-
-$socket = new MemMemov\Ndb\Socket('127.0.0.1', '43152');
+$socket = new MemMemov\Ndb\StreamSocket('127.0.0.1', '43152');
 $client = new MemMemov\Ndb\Client($socket);
 
 $length = 3;
