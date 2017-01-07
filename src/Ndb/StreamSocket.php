@@ -40,9 +40,16 @@ class StreamSocket implements Socket
 
         $message .= self::$ending;
 
-        fwrite($this->stream, $message);
+        $byteCount = fwrite($this->stream, $message);
+
+        if (false === $byteCount) {
+            throw new ConnectionFailed(sprintf('Sending message to server %s faild.', $this->server));
+        }
     }
 
+    /**
+     * @throws ConnectionFailed
+     */
     private function open(): void
     {
         if (null === $this->stream) {
@@ -54,6 +61,10 @@ class StreamSocket implements Socket
                 30,
                 \STREAM_CLIENT_CONNECT
             );
+            if (false === $this->stream) {
+                $this->stream = null;
+                throw new ConnectionFailed(sprintf('Socket connection to URL %s faild.', $url));
+            }
         }
     }
 
